@@ -11,6 +11,8 @@ import com.example.moodmosaic.db.dao.MoodDefinitionDao
 import com.example.moodmosaic.db.dao.MoodEntryDao
 import com.example.moodmosaic.db.entities.MoodDefinition
 import com.example.moodmosaic.db.entities.MoodEntry
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Database(entities = [MoodEntry::class, MoodDefinition::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
@@ -22,7 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        fun getInstance(context: Context): AppDatabase {
+        fun getInstance(context: Context, scope: CoroutineScope): AppDatabase {
             val tempInstance = INSTANCE
             if (tempInstance != null) {
                 return tempInstance
@@ -34,7 +36,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "app_database"
                 )
-                    .addCallback(AppDatabaseCallback())
+                    .addCallback(AppDatabaseCallback(scope) { INSTANCE!!.moodDefinitionDao() })
                     .build()
 
                 INSTANCE = instance
@@ -44,14 +46,27 @@ abstract class AppDatabase : RoomDatabase() {
     }
 }
 
-class AppDatabaseCallback : RoomDatabase.Callback() {
+class AppDatabaseCallback(private val scope: CoroutineScope, private val databaseProvider: () -> MoodDefinitionDao) : RoomDatabase.Callback() {
 
     override fun onCreate(db: SupportSQLiteDatabase) {
+        super.onCreate(db)
+
+        val defaultMoods = listOf(
+            MoodDefinition(id = 1L, name = "Sehr schlecht 😖", colorHex = "#E57373"),
+            MoodDefinition(id = 2L, name = "Schlecht 😞", colorHex = "#FFB74D"),
+            MoodDefinition(id = 3L, name = "Neutral 😐", colorHex = "#FFF176"),
+            MoodDefinition(id = 4L, name = "Gut 🙂", colorHex = "#81C784"),
+            MoodDefinition(id = 5L, name = "Sehr gut 😊", colorHex = "#64B5F6")
+        )
+
         Log.d("AppDatabase", "Database was created")
 
-        // todo initial data seeding
-        // todo seedDefaultMoods()
-        // todo insert default moods
-        // todo initDefaultData()
+        scope.launch {
+            val dao = databaseProvider()
+
+            defaultMoods.forEach { mood ->
+                dao.insert(mood)
+            }
+        }
     }
 }
