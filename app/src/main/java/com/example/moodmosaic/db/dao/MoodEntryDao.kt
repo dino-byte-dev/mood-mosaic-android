@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.moodmosaic.db.entities.MoodEntry
+import com.example.moodmosaic.db.entities.MoodEntryWithDefinition
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
@@ -30,4 +31,7 @@ interface MoodEntryDao {
 
     @Query("SELECT * FROM mood_entries WHERE date BETWEEN :start AND :end ORDER BY date ASC")
     fun getMoodsInBetween(start: LocalDate, end: LocalDate): Flow<List<MoodEntry>>
+
+    @Query("SELECT e.entryId, e.date, e.moodId, e.note, d.colorHex, d.name FROM mood_entries e INNER JOIN mood_definitions d on e.moodId = d.id WHERE date BETWEEN :start AND :end ORDER BY date ASC")
+    fun getMoodsInBetweenWithDefinition(start: LocalDate, end: LocalDate): Flow<List<MoodEntryWithDefinition>>
 }

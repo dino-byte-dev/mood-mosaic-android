@@ -7,7 +7,7 @@ import java.time.LocalDate
 
 class MoodRepository(private val dao: MoodEntryDao) {
 
-    fun getAllMoods() = dao.getAllMoods()
+    fun getMoodsInBetweenWithDefinition(start: LocalDate, end: LocalDate) = dao.getMoodsInBetweenWithDefinition(start, end)
 
     fun getMoodsCurrentMonth(now: LocalDate = LocalDate.now()): Flow<List<MoodEntry>> {
         val start = now.withDayOfMonth(1)
@@ -23,6 +23,12 @@ class MoodRepository(private val dao: MoodEntryDao) {
     }
 
     suspend fun getMood(date: LocalDate) = dao.getMoodByDate(date)
+
+    suspend fun update(entry: MoodEntry) =
+        dao.updateMood(entry)
+
+    suspend fun delete(entry: MoodEntry) =
+        dao.deleteMood(entry)
 
     suspend fun saveMood(entry: MoodEntry) {
         dao.insertMood(entry)
