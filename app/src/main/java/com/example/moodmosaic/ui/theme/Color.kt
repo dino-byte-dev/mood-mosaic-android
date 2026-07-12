@@ -9,3 +9,16 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+val CalendarEmptyDay = Color(0xFFE0E0E0)
+val CalendarBufferDay = Color(0xFF808080)
+
+fun Color.toHex(): String {
+    return String.format(
+        "#%02X%02X%02X%02X",
+        (alpha * 255).toInt(),
+        (red * 255).toInt(),
+        (green * 255).toInt(),
+        (blue * 255).toInt()
+    )
+}

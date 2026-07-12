@@ -11,6 +11,8 @@ import com.example.moodmosaic.db.dao.MoodDefinitionDao
 import com.example.moodmosaic.db.dao.MoodEntryDao
 import com.example.moodmosaic.db.entities.MoodDefinition
 import com.example.moodmosaic.db.entities.MoodEntry
+import com.example.moodmosaic.ui.theme.CalendarEmptyDay
+import com.example.moodmosaic.ui.theme.toHex
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -52,11 +54,12 @@ class AppDatabaseCallback(private val scope: CoroutineScope, private val databas
         super.onCreate(db)
 
         val defaultMoods = listOf(
+            MoodDefinition(id = 0L, name = "Keine Stimmung ❌", colorHex = CalendarEmptyDay.toHex()),
             MoodDefinition(id = 1L, name = "Sehr schlecht 😖", colorHex = "#E57373"),
             MoodDefinition(id = 2L, name = "Schlecht 😞", colorHex = "#FFB74D"),
-            MoodDefinition(id = 3L, name = "Neutral 😐", colorHex = "#FFF176"),
-            MoodDefinition(id = 4L, name = "Gut 🙂", colorHex = "#81C784"),
-            MoodDefinition(id = 5L, name = "Sehr gut 😊", colorHex = "#64B5F6")
+            MoodDefinition(id = 3L, name = "Neutral 😐", colorHex = "#64B5F6"),
+            MoodDefinition(id = 4L, name = "Gut 🙂", colorHex = "#FFF176"),
+            MoodDefinition(id = 5L, name = "Sehr gut 😊", colorHex = "#81C784")
         )
 
         Log.d("AppDatabase", "Database was created")
