@@ -2,7 +2,6 @@ package com.example.moodmosaic.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,7 +49,7 @@ fun MoodScreen(
         verticalAlignment = Alignment.Top
     ) {
         moodDefinitions.forEach { mood ->
-            if (mood.name != "Keine Stimmung") {
+            if (mood.name != "Keine Angabe") {
 
                 Column(
                     modifier = Modifier.weight(1f),

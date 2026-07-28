@@ -54,12 +54,14 @@ class AppDatabaseCallback(private val scope: CoroutineScope, private val databas
         super.onCreate(db)
 
         val defaultMoods = listOf(
-            MoodDefinition(id = 0L, name = "Keine Stimmung ❌", colorHex = CalendarEmptyDay.toHex()),
-            MoodDefinition(id = 1L, name = "Sehr schlecht 😖", colorHex = "#E57373"),
-            MoodDefinition(id = 2L, name = "Schlecht 😞", colorHex = "#FFB74D"),
-            MoodDefinition(id = 3L, name = "Neutral 😐", colorHex = "#64B5F6"),
-            MoodDefinition(id = 4L, name = "Gut 🙂", colorHex = "#FFF176"),
-            MoodDefinition(id = 5L, name = "Sehr gut 😊", colorHex = "#81C784")
+            MoodDefinition(id = 1L, name = "Sehr schlecht", colorHex = "#E47272"),
+            MoodDefinition(id = 2L, name = "Schlecht", colorHex = "#FC891F"),
+            MoodDefinition(id = 3L, name = "Eher schlecht", colorHex = "#FCC52C"),
+            MoodDefinition(id = 4L, name = "Neutral", colorHex = "#64B3F6"),
+            MoodDefinition(id = 5L, name = "Eher gut", colorHex = "#12AD97"),
+            MoodDefinition(id = 6L, name = "Gut", colorHex = "#80C683"),
+            MoodDefinition(id = 7L, name = "Sehr gut", colorHex = "#4CAF50"),
+            MoodDefinition(id = 8L, name = "Keine Angabe", colorHex = CalendarEmptyDay.toHex()),
         )
 
         Log.d("AppDatabase", "Database was created")
