@@ -5,9 +5,13 @@ import com.example.moodmosaic.db.entities.MoodEntry
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
-class MoodRepository(private val dao: MoodEntryDao) {
+class MoodEntryRepository(private val dao: MoodEntryDao) {
 
     fun getMoodsInBetweenWithDefinition(start: LocalDate, end: LocalDate) = dao.getMoodsInBetweenWithDefinition(start, end)
+
+    fun getAllMoods() = dao.getAllMoods()
+
+    fun getAllMoodsWithDefinition() = dao.getAllMoodsWithDefinition()
 
     fun getMoodsCurrentMonth(now: LocalDate = LocalDate.now()): Flow<List<MoodEntry>> {
         val start = now.withDayOfMonth(1)

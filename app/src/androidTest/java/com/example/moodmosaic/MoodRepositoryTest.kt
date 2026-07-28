@@ -2,7 +2,8 @@ package com.example.moodmosaic
 
 import com.example.moodmosaic.db.dao.MoodEntryDao
 import com.example.moodmosaic.db.entities.MoodEntry
-import com.example.moodmosaic.db.repository.MoodRepository
+import com.example.moodmosaic.db.entities.MoodEntryWithDefinition
+import com.example.moodmosaic.db.repository.MoodEntryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -16,12 +17,12 @@ import org.junit.Test
 class MoodRepositoryTest {
 
     private lateinit var dao: FakeMoodEntryDao
-    private lateinit var repository: MoodRepository
+    private lateinit var repository: MoodEntryRepository
 
     @Before
     fun setup() {
         dao = FakeMoodEntryDao()
-        repository = MoodRepository(dao)
+        repository = MoodEntryRepository(dao)
     }
 
     @Test
@@ -80,14 +81,39 @@ class MoodRepositoryTest {
 
         assertEquals(6, result.size)
     }
+
+    @Test
+    fun getMoodsWithDefinitions() = runTest {
+        val now = LocalDate.of(2027, 7, 15)
+
+        dao.moodsWithDefinition.addAll(
+            listOf(
+                MoodEntryWithDefinition(0, now, 4, null, "#00ffff"),
+                MoodEntryWithDefinition(1, now.plusDays(1), 5, null, "#00ff00"),
+                MoodEntryWithDefinition(2, now.plusDays(2), 6, null, "#ffff00")
+            )
+        )
+
+        val result = repository.getAllMoodsWithDefinition().first()
+
+        assertEquals(3, result.size)
+        assertEquals(4, result.first().moodId)
+        assertEquals(6, result.last().moodId)
+        assertEquals("#ffff00", result.last().colorHex)
+        assertEquals("#00ffff", result.first().colorHex)
+    }
 }
 
 class FakeMoodEntryDao : MoodEntryDao {
 
     val moods = mutableListOf<MoodEntry>()
+    val moodsWithDefinition = mutableListOf<MoodEntryWithDefinition>()
 
     override fun getAllMoods(): Flow<List<MoodEntry>> =
         flowOf(moods)
+
+    override fun getAllMoodsWithDefinition(): Flow<List<MoodEntryWithDefinition>> =
+        flowOf(moodsWithDefinition)
 
     override fun getMoodByDate(date: LocalDate): Flow<MoodEntry?> =
         flowOf(moods.find { it.date == date })
@@ -95,6 +121,11 @@ class FakeMoodEntryDao : MoodEntryDao {
     override fun getMoodsInBetween(start: LocalDate, end: LocalDate): Flow<List<MoodEntry>> =
         flow {
             emit(moods.filter { it.date >= start && it.date <= end })
+        }
+
+    override fun getMoodsInBetweenWithDefinition(start: LocalDate, end: LocalDate): Flow<List<MoodEntryWithDefinition>> =
+        flow {
+            emit(moodsWithDefinition.filter { it.date >= start && it.date <= end })
         }
 
     override suspend fun insertMood(item: MoodEntry) {

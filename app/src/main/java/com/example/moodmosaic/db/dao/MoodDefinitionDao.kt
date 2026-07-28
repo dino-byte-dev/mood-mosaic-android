@@ -22,5 +22,5 @@ interface MoodDefinitionDao {
     suspend fun delete(item: MoodDefinition)
 
     @Query("SELECT * FROM mood_definitions ORDER BY id ASC")
-    fun getMoodDefinitions(): Flow<List<MoodDefinition>>
+    fun getAll(): Flow<List<MoodDefinition>>
 }

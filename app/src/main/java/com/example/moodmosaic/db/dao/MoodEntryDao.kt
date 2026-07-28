@@ -26,6 +26,9 @@ interface MoodEntryDao {
     @Query("SELECT * FROM mood_entries ORDER BY date DESC")
     fun getAllMoods(): Flow<List<MoodEntry>>
 
+    @Query("SELECT me.entryId, me.date, me.moodId, me.note, md.colorHex, md.name FROM mood_entries me INNER JOIN mood_definitions md on me.moodId = md.id ORDER BY date ASC")
+    fun getAllMoodsWithDefinition(): Flow<List<MoodEntryWithDefinition>>
+
     @Query("SELECT * FROM mood_entries WHERE date = :date")
     fun getMoodByDate(date: LocalDate): Flow<MoodEntry?>
 

@@ -4,16 +4,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.moodmosaic.db.entities.MoodEntry
-import com.example.moodmosaic.db.repository.MoodRepository
+import com.example.moodmosaic.db.repository.MoodDefinitionRepository
+import com.example.moodmosaic.db.repository.MoodEntryRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class MoodEntryViewModel(
-     val repository: MoodRepository, start: LocalDate, end: LocalDate
+class CalendarViewModel(
+    private val repository: MoodEntryRepository,
+    private val mdRepository: MoodDefinitionRepository,
+    start: LocalDate,
+    end: LocalDate
 ) : ViewModel() {
+    val moodDefinitions = mdRepository
+        .getMoodDefinitions()
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            emptyList()
+        )
 
     val items = repository
         .getMoodsInBetweenWithDefinition(start, end)
@@ -24,7 +35,7 @@ class MoodEntryViewModel(
             generateSequence(start) { date ->
                 if (date < end) date.plusDays(1) else null
             }.map { date ->
-                CalendarDay(
+                CalendarEntry(
                     date = date,
                     mood = byDate[date]
                 )
@@ -55,13 +66,16 @@ class MoodEntryViewModel(
     }
 }
 
-class MoodEntryViewModelFactory(
-    private val repository: MoodRepository, val start: LocalDate, val end: LocalDate
+class CalendarViewModelFactory(
+    private val repository: MoodEntryRepository,
+    private val mdRepository: MoodDefinitionRepository,
+    val start: LocalDate,
+    val end: LocalDate
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MoodEntryViewModel::class.java)) {
-            return MoodEntryViewModel(repository, start, end) as T
+        if (modelClass.isAssignableFrom(CalendarViewModel::class.java)) {
+            return CalendarViewModel(repository, mdRepository, start, end) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
