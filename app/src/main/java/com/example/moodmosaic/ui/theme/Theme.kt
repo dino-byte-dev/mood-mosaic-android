@@ -1,43 +1,102 @@
 package com.example.moodmosaic.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = GreenPrimaryDark,
+    onPrimary = GreenOnPrimaryDark,
+    primaryContainer = GreenPrimaryContainerDark,
+    onPrimaryContainer = GreenOnPrimaryContainerDark,
+
+    secondary = GreenSecondaryDark,
+    onSecondary = GreenOnSecondaryDark,
+    secondaryContainer = GreenSecondaryContainerDark,
+    onSecondaryContainer = GreenOnSecondaryContainerDark,
+
+    tertiary = TealTertiaryDark,
+    onTertiary = TealOnTertiaryDark,
+    tertiaryContainer = TealTertiaryContainerDark,
+    onTertiaryContainer = TealOnTertiaryContainerDark,
+
+    background = BackgroundDark,
+    onBackground = OnBackgroundDark,
+
+    surface = SurfaceDark,
+    onSurface = OnSurfaceDark,
+
+    surfaceVariant = SurfaceVariantDark,
+    onSurfaceVariant = OnSurfaceVariantDark,
+
+    outline = OutlineDark,
+    outlineVariant = OutlineVariantDark,
+
+    error = ErrorDark,
+    onError = OnErrorDark,
+    errorContainer = ErrorContainerDark,
+    onErrorContainer = OnErrorContainerDark,
+
+    inverseSurface = InverseSurfaceDark,
+    inverseOnSurface = InverseOnSurfaceDark,
+    inversePrimary = InversePrimaryDark
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = GreenPrimaryLight,
+    onPrimary = GreenOnPrimaryLight,
+    primaryContainer = GreenPrimaryContainerLight,
+    onPrimaryContainer = GreenOnPrimaryContainerLight,
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    secondary = GreenSecondaryLight,
+    onSecondary = GreenOnSecondaryLight,
+    secondaryContainer = GreenSecondaryContainerLight,
+    onSecondaryContainer = GreenOnSecondaryContainerLight,
+
+    tertiary = TealTertiaryLight,
+    onTertiary = TealOnTertiaryLight,
+    tertiaryContainer = TealTertiaryContainerLight,
+    onTertiaryContainer = TealOnTertiaryContainerLight,
+
+    background = BackgroundLight,
+    onBackground = OnBackgroundLight,
+
+    surface = SurfaceLight,
+    onSurface = OnSurfaceLight,
+
+    surfaceVariant = SurfaceVariantLight,
+    onSurfaceVariant = OnSurfaceVariantLight,
+
+    outline = OutlineLight,
+    outlineVariant = OutlineVariantLight,
+
+    error = ErrorLight,
+    onError = OnErrorLight,
+    errorContainer = ErrorContainerLight,
+    onErrorContainer = OnErrorContainerLight,
+
+    inverseSurface = InverseSurfaceLight,
+    inverseOnSurface = InverseOnSurfaceLight,
+    inversePrimary = InversePrimaryLight
 )
+
+val ColorScheme.calendarEmptyDay: Color get() = CalendarEmptyDay
+val ColorScheme.calendarBufferDay: Color get() = CalendarBufferDay
+val ColorScheme.trueBlack: Color get() = TrueBlack
 
 @Composable
 fun MoodMosaicTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    // We prefer our own color schema instead of Dynamic color (Material You)
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

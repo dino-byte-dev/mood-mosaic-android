@@ -24,6 +24,19 @@ class CalendarLogic {
         return (0..daysBetween).map { firstDay.plusDays(it) }
     }
 
+    fun getCalendarGrid(targetMonth: YearMonth): List<LocalDate> {
+        // PreviousMonthBufferDays
+        val previous = getPreviousMonthBufferDays(targetMonth)
+
+        // Calculate Days
+        val daysBetween = getDaysInMonth(targetMonth)
+
+        // NextMonthBufferDays
+        val next = getNextMonthBufferDays(targetMonth)
+
+        return previous + daysBetween + next
+    }
+
     fun getPreviousMonthBufferDays(targetMonth: YearMonth): List<LocalDate> {
         val firstDayOfMonth:  LocalDate = targetMonth.atDay(1)
         val daysToSubtract = firstDayOfMonth.dayOfWeek.value - 1
